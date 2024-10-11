@@ -1,47 +1,37 @@
 # 24-1411
 Репозиторий для МИРЭА
 
-#задача 5
-#робот обходит центральный прямоугольник
+#задача 6
+#робот обхрдит все препятствия и ставит маркеры у внешнего барьера 
 using HorizonSideRobots
+
 
 
 r = Robot(animate=true)
 inverse(side::HorizonSide) = HorizonSide((Int(side)+2)%4)
 
-function opheilalalei!(robot)
-    while !isborder(robot, Sud) && !isborder(robot, West)
-        do_upora_emaie!(robot, Sud)
-        do_upora_emaie!(robot, West)
-    end
-    for side = (Ost, Nord), (Nord, West)
-        
+
+function square!(robot)
+    for s in (Ost, Sud, West, Nord)
+        do_stenki_bistro!(robot, s, 1)    
     end
 end
 
-function do_upora_emaie!(robot, side)
+function do_stenki_bistro!(robot, side, p)
     while !isborder(robot, side)
+        if p == 1
+            putmarker!(robot)
+        end
         move!(robot, side)
     end
 end
 
-
-function slim_shady_gooo!(robot, side::NTuple{2, HorizonSide})
-    while !isborder(robot, side[2])
-        do_upora_emaie(robot, side[1])
-
-    end
-end
-
-
-
-function HorizonSideRobots.move!(robot, side, num_steps::Integer)
-    for _ in 1:num_steps
+function chetaem_shagi!(robot, side)
+    s = 0
+    while !isborder(robot, side) 
         move!(robot, side)
+        putmarker!(robot)
+        s = s + 1
     end
+    return s
 end
-
-function obed_programmer_check!(robot, side)
-    
-    
-end 
