@@ -81,3 +81,37 @@ function movetoend!(robot, side)
     end
     return n
 end
+
+
+
+
+using HorizonSideRobots
+robot = Robot(animate = true)
+
+
+inverse(side::HorizonSide)=HorizonSide((Int(side)+2)%4)
+
+
+mutable struct R
+    robot::robot
+    flag::Bool
+end
+
+RR = R(robot, true)
+
+function HorizonSideRobots.move!(robot::R, side)
+    if !isborder(robot.robot, side)
+        move!(robot.robot, side)
+        robot.flag = !robot.flag
+    end
+    if robot.flag
+        putmarker!(robot.robot)
+    end
+end
+
+
+function do_upora_emai(robot, side)
+    while !isborder(robot.robot, side)    
+        move!(robot, side)
+    end
+end
