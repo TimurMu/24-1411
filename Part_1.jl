@@ -132,3 +132,80 @@ function do_upora_num!(robot, side)
     end
     return n
 end
+
+
+#задача 4
+#робот делает косой крест
+
+function xcross!(robot)
+    for s = ((Nord, Ost), (Sud, Ost), (Sud, West), (Nord, West))
+        n = xmark_direct!(robot, s)
+        xmove!(robot, inverse.(s), n)
+    end
+end
+
+function xmove!(robot, side, num_steps::Integer)
+    for _ in 1:num_steps
+        move!(robot, side[1])
+        move!(robot, side[2])
+    end
+end
+
+function xmark_direct!(robot, side::NTuple{2, HorizonSide})
+    n = 0
+    while !(isborder(robot, side[1]) || isborder(robot, side[2]))
+        #перегородки нет с обоих направлений
+        move!(robot, side[1])
+        move!(robot, side[2])
+        n = n + 1
+        putmarker!(robot)
+    end
+    return n
+end
+
+
+#задача 5
+#робот обходит центральный прямоугольник
+
+
+function opheilalalei!(robot) #финальная функция 
+    while !isborder(robot, Sud) && !isborder(robot, West)
+        do_upora_shagay_bistro!(robot, Sud)
+        do_upora_shagay_bistro!(robot, West)
+    end
+
+    for side in [(Ost, Nord), (Sud, Ost)]
+        slim_shady_gooo!(robot, side)
+    end
+
+end
+
+function do_upora_shagay_bistro!(robot, side) #доход до стенки без отметок
+    while !isborder(robot, side)
+        move!(robot, side)
+    end
+end
+
+
+function do_upora_emaie!(robot, side) #доход до стенки с отметками
+    while !isborder(robot, side)
+        for n = (Nord, Ost, West, Sud)
+            if isborder(robot, n)
+                putmarker!(robot)
+            end
+        end
+        move!(robot, side)
+    end
+end
+
+
+function slim_shady_gooo!(robot, side::NTuple{2, HorizonSide})
+    while !isborder(robot, side[2])
+        slice = side[1]
+        do_upora_emaie!(robot, slice)
+        putmarker!(robot)
+        move!(robot, side[2])
+        slice = inverse(slice)
+        do_upora_emaie!(robot, slice)
+    end
+end
