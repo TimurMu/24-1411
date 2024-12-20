@@ -24,6 +24,11 @@ function HorizonSideRobots.move!(robot::R, side)
 
 end
 
+function do_upora!(robot, side)
+    while !isborder(robot.robot, side)
+        move!(robot.robot, side)   
+    end 
+end
 
 function chetaem_ne_stenki_gadem!(robot, side)
     countwall = 0 
@@ -42,11 +47,22 @@ function chetaem_ne_stenki_gadem!(robot, side)
         end
         move!(robot.robot, side)
     end
+    if isWall == true
+        countwall += 1
+    end
     return countwall
 end
 
 
 function snake_mini_kapetz!(robot)
     total_count = 0
+    do_upora!(robot, West)
+    do_upora!(robot, Sud)
+    side = Ost
+    while !isborder(robot.robot, Nord)
+        total_count += chetaem_ne_stenki_gadem!(robot, side)
+        move!(robot.robot, Nord)
+        side = inverse(side)
+    end
+    return total_count
 end
-
